@@ -1,4 +1,10 @@
 {% extends 'analyze_txt/base.html' %}
 {% block content %}
-    <h2>Home Page</h2>
+    <h1>Home Page</h1>
+    <br>
+    <form method="post" action="#">
+    {% csrf_token %}
+        {{ form }}
+        <button type="submit" name="start">Analyze</button>
+    </form>
 {% endblock %} #}
