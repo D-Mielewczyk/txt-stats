@@ -17,6 +17,7 @@ def home(response):
                     words[word] = 0
                 words[word] += 1
             res = f"<p>{words}</p>"
+            # TODO: redirect to site with results
             return render(response, "analyze_txt/home.html", {"form": res})
 
     f = AnalyzeTxt()
