@@ -1,0 +1,25 @@
+{% extends 'analyze_txt/base.html' %}
+{% block content %}
+    <h1>Your analyzed text</h1>
+    <br>
+    <h2>Original text:</h2>
+    <label>
+        <textarea rows = "5" cols ="70" readonly>{{ input.text }}</textarea>
+    </label>
+    <h2>Counted words:</h2>
+    <label>
+        {# hard to read intendation so text area won't be messed up #}
+        <textarea rows = "10" cols ="35" readonly>
+{% for key, value in words.items %}{{ key }}: {{ value }}
+{% endfor %}</textarea>
+    </label>
+    <h3>Plot:</h3>
+    <img src='data:image/png;base64,{{ plot }}'>
+    <h2>Palindromes:</h2>
+    <label>
+        <textarea rows = "6" cols ="35" readonly>
+{% for word in palindromes %}{{ word }}
+{% endfor %}</textarea>
+    </label>
+
+{% endblock %}

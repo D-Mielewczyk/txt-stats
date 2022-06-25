@@ -4,7 +4,7 @@
     <br>
     <form method="post" action="#">
     {% csrf_token %}
-        {{ form }}
-        <button type="submit" name="start">Analyze</button>
+        {{ form.as_p }}
+        <button type="submit" name="start" value="start">Analyze</button>
     </form>
-{% endblock %} #}
+{% endblock %}
