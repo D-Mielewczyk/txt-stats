@@ -3,7 +3,8 @@ from .models import TextInput
 
 
 class TextInputSerializer(serializers.ModelSerializer):
-    text = serializers.CharField(max_length=int(1e9))
+    title = serializers.CharField()
+    text = serializers.CharField(style={'base_template': 'textarea.html'})
     case_sensitive = serializers.BooleanField(required=False, default=0)
 
     class Meta:

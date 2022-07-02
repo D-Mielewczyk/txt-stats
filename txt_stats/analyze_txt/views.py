@@ -1,47 +1,38 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from .forms import AnalyzeTxt
-from re import sub
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
+from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import TextInputSerializer
 from .models import TextInput
 from .utils import *
 
+import logging
+
+from django.contrib.auth.models import User
+
 
 # Create your views here.
-class TextInputViews(APIView):
-    @staticmethod
-    def post(request):
-        serializer = TextInputSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-        else:
-            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+class TextInputViews(viewsets.ModelViewSet):
+    queryset = TextInput.objects.all()
+    serializer_class = TextInputSerializer
 
     @staticmethod
-    def get(request, id=None):
-        if id:
-            item = TextInput.objects.get(id=id)
-            words = count_words(item.text, item.case_sensitive)
-            palindromes = get_palindromes(words)
-            plot = plot_words(words)
-            return render(request, "analyze_txt/analyzed_txt.html", {"input": item, "words": words, "palindromes": palindromes, "plot": plot})
-
-        items = TextInput.objects.all()
-        serializer = TextInputSerializer(items, many=True)
-        return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+    def retrieve(request, pk=None):
+        queryset = TextInput.objects.all()
+        txt = get_object_or_404(queryset, pk=pk)
+        serializer = TextInputSerializer(txt)
+        words = count_words(serializer.data["text"], serializer.data["case_sensitive"])
+        palindromes = get_palindromes(words)
+        print(serializer.data)
+        return Response({"Title": serializer.data["title"], "Occurances": words, "Palindromes": palindromes})
 
 
 def home(response):
-    # if response.method == "POST":
-    #     if response.POST.get("start"):
-    #         txt = response.POST.get("text")
-    #
-    #         # TODO: redirect to site with results
-    #         return render(response, "analyze_txt/home.html", {"form": res})
-
     f = AnalyzeTxt()
+    # logging.critical("siema")
+    print(User.objects.all())
     return render(response, "analyze_txt/home.html", {"form": f})

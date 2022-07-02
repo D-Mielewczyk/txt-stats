@@ -7,7 +7,7 @@ import io, base64
 def count_words(txt, case_sensitive):
     if not case_sensitive:
         txt = txt.lower()
-    txt = sub(r'[^a-z ]', '', txt)
+    txt = sub(r'[^A-z ]', '', txt)
     words = {}
     for word in txt.split():
         if word not in words.keys():
