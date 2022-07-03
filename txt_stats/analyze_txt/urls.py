@@ -7,8 +7,7 @@ router.register(r'db', views.TextInputViews, basename='text')
 
 urlpatterns = [
     path("", views.home, name="home"),
-    # path("add-text/", views.TextInputViews.as_view()),
-    # path("texts/<int:id>", views.TextInputViews.as_view()),
+    path("view/<int:id>/", views.analyzed, name="view")
 ]
 
 urlpatterns += router.urls

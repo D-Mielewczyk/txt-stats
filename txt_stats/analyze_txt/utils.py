@@ -17,7 +17,7 @@ def count_words(txt, case_sensitive):
     return words
 
 
-def get_palindromes(words):
+def extract_palindromes(words):
     palindromes = []
     for word in words.keys():
         if len(word) <= 2:

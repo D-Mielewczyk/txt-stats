@@ -2,8 +2,8 @@
 {% block content %}
     <h1>Home Page</h1>
     <br>
-    <form method="post" action="#">
-    {% csrf_token %}
+    <form method="POST" action="/db/">
+        {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" name="start" value="start">Analyze</button>
     </form>
