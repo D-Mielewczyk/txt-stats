@@ -42,14 +42,13 @@ def home(response):
     return render(response, "analyze_txt/home.html", {"form": f})
 
 
-def analyzed(response, id):
-    t = TextInput.objects.get(id=id)
-    data = t.__dict__
-    data["text_input"] = t
-    s = AnalyzeTextSerializer(data=data)
-    s.is_valid(raise_exception=True)
-    print(s.errors)
-    s.save()
+import logging
 
-    return render(response, "analyze_txt/analyzed_txt.html", {"input": t, "words": s["occurances"],
-                                                              "palindromes": s["palindromes"]})
+
+def analyzed(response, id):
+    t = TextInputViews()
+    print(t.retrieve(t.action))
+
+    return HttpResponse("<p>elo</p>")
+    # return render(response, "analyze_txt/analyzed_txt.html", {"input": t, "words": s["occurrences"],
+    #                                                           "palindromes": s["palindromes"], "plot": plot})

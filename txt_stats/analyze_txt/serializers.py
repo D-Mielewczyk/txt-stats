@@ -14,15 +14,15 @@ class TextInputSerializer(serializers.ModelSerializer):
 
 
 class AnalyzeTextSerializer(TextInputSerializer):
-    occurances = serializers.SerializerMethodField()
+    occurrences = serializers.SerializerMethodField()
     palindromes = serializers.SerializerMethodField()
 
     class Meta:
         model = TextInput
-        fields = ["title", "occurances", "palindromes"]
+        fields = ["title", "occurrences", "palindromes"]
 
     @staticmethod
-    def get_occurances(text_input):
+    def get_occurrences(text_input):
         return count_words(text_input.text, text_input.case_sensitive)
 
     @staticmethod

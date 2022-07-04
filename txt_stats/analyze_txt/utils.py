@@ -28,10 +28,14 @@ def extract_palindromes(words):
     return palindromes
 
 
+# TODO: empty plot
+
 def plot_words(words):
     plt.style.use("dark_background")
     fig, ax = plt.subplots()
     values = list(words.values())[:10]
+    if len(values) == 0:
+        return None
     purple = Color("purple")
     blue = Color("blue")
     colors = [color.hex for color in list(purple.range_to(blue, 10))]
