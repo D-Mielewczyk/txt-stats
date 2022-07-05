@@ -7,7 +7,8 @@ router.register(r'db', views.TextInputViews, basename='text')
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path("view/<int:id>/", views.analyzed, name="view")
+    path("view/<int:id>/", views.analyzed, name="view"),
+    path("view/", views.list_analyzed, name="list")
 ]
 
 urlpatterns += router.urls

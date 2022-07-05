@@ -24,14 +24,6 @@ class TextInputViews(viewsets.ModelViewSet):
             return AnalyzeTextSerializer
         return TextInputSerializer
 
-    # @staticmethod
-    # def retrieve(request, pk=None):
-    #     serializer = TextInputSerializer(txt)
-    #     words = count_words(serializer.data["text"], serializer.data["case_sensitive"])
-    #     palindromes = extract_palindromes(words)
-    #     print(serializer.data)
-    #     return Response({"Title": serializer.data["title"], "Occurances": words, "Palindromes": palindromes})
-
 
 def home(response):
     if response.method == "POST":
@@ -42,11 +34,16 @@ def home(response):
     return render(response, "analyze_txt/home.html", {"form": f})
 
 
+def list_analyzed(response):
+    call = requests.get("http://127.0.0.1:8000/db")
+    return render(response, "analyze_txt/list_analyzed.html", {"texts": call.json()})
+
+
 def analyzed(response, id):
-    api = requests.get(f"http://127.0.0.1:8000/db/{id}")
-    api = api.json()
-    plot = plot_words(api["occurrences"])
-    return render(response, "analyze_txt/analyzed_txt.html", {"text": api["text"],
-                                                              "words": api["occurrences"],
-                                                              "plot": plot,
-                                                              "palindromes": api["palindromes"]})
+    call = requests.get(f"http://127.0.0.1:8000/db/{id}")
+    call = call.json()
+    plot = plot_words(call["occurrences"])
+    return render(response, "analyze_txt/analyzed.html", {"text": call["text"],
+                                                          "words": call["occurrences"],
+                                                          "plot": plot,
+                                                          "palindromes": call["palindromes"]})

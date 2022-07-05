@@ -44,7 +44,7 @@ def plot_words(words):
     ax.set_title("Top 10 most common words")
     ax.set_xlabel("word")
     ax.set_ylabel("count")
-    ax.set_ylim(ymin=round(min(values) - values[-1] * 0.1))
+    ax.set_ylim(ymin=round(min(values) - values[-1] * 0.1) - 1)
     # fig.savefig("E://MDDaw/Pobrane/words.pdf")
 
     # https://spapas.github.io/2021/02/08/django-matplotlib/
