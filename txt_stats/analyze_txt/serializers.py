@@ -19,7 +19,7 @@ class AnalyzeTextSerializer(TextInputSerializer):
 
     class Meta:
         model = TextInput
-        fields = ["title", "occurrences", "palindromes"]
+        fields = ["title", "text", "occurrences", "palindromes"]
 
     @staticmethod
     def get_occurrences(text_input):

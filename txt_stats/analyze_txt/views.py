@@ -10,7 +10,7 @@ from .serializers import *
 from .models import TextInput
 from .utils import *
 
-import logging
+import requests
 
 from django.contrib.auth.models import User
 
@@ -42,13 +42,11 @@ def home(response):
     return render(response, "analyze_txt/home.html", {"form": f})
 
 
-import logging
-
-
 def analyzed(response, id):
-    t = TextInputViews()
-    print(t.retrieve(t.action))
-
-    return HttpResponse("<p>elo</p>")
-    # return render(response, "analyze_txt/analyzed_txt.html", {"input": t, "words": s["occurrences"],
-    #                                                           "palindromes": s["palindromes"], "plot": plot})
+    api = requests.get(f"http://127.0.0.1:8000/db/{id}")
+    api = api.json()
+    plot = plot_words(api["occurrences"])
+    return render(response, "analyze_txt/analyzed_txt.html", {"text": api["text"],
+                                                              "words": api["occurrences"],
+                                                              "plot": plot,
+                                                              "palindromes": api["palindromes"]})
