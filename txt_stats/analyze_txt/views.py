@@ -1,18 +1,14 @@
+import requests
+from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import AnalyzeTxt
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
 from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import *
+
+from .forms import CreateTxtForm, RegisterForm, LoginForm, ChangePasswordForm
 from .models import TextInput
+from .serializers import *
 from .utils import *
-
-import requests
-
-from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -34,8 +30,50 @@ def home(response):
         call = call.json()
         return redirect(f"/view/{call['id']}")
 
-    f = AnalyzeTxt()
-    return render(response, "analyze_txt/home.html", {"form": f})
+    f = CreateTxtForm()
+    return render(response, "analyze_txt/form.html", {"title": "Analyze your text", "form": f})
+
+
+def account(response):
+    if response.user.is_authenticated:
+        if response.method == "POST":
+            if "password" in response.POST.keys():
+                user = authenticate(response, username=response.user.username, password=response.POST["password"])
+                if user is not None:
+                    return render(response, "analyze_txt/account_message.html", {"title": "Wrong password!",
+                                                                                 "button": "Try again..."})
+                u = User.objects.get(username=response.user.username)
+                u.set_password(response.POST["new_password"])
+                u.save()
+                return render(response, "analyze_txt/account_message.html", {"title": "Password changed successfully.",
+                                                                             "button": "Proceed to your account..."})
+            else:
+                logout(response)
+                return redirect("/account/")
+        f = ChangePasswordForm()
+        return render(response, "analyze_txt/account.html", {"form": f, "user": response.user})
+
+    if response.method == "POST":
+        # Check if we are registering or logging in
+        if "email" in response.POST.keys():
+            user = User.objects.create_user(response.POST["username"], response.POST["email"],
+                                            response.POST["password"])
+            print(user)
+        else:
+            user = authenticate(response, username=response.POST["username"], password=response.POST["password"])
+            if user is not None:
+                login(response, user)
+                return render(response, "analyze_txt/account_message.html", {"title": "Successfully logged in!",
+                                                                             "button": "Proceed to your account..."})
+            else:
+                return render(response, "analyze_txt/account_message.html",
+                              {"title": "Unsuccessful log in attempt! User with same login already exists",
+                               "button": "Try again..."})
+
+    f = LoginForm()
+    f2 = RegisterForm()
+    return render(response, "analyze_txt/double_form.html",
+                  {"title": "Login", "form": f, "title2": "Register", "form2": f2})
 
 
 def list_analyzed(response):

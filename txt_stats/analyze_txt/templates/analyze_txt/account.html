@@ -1,10 +1,18 @@
 {% extends 'analyze_txt/base.html' %}
 {% block content %}
-    <h1>Register</h1>
-    <br>
-    <form method="POST" action="#">
+    <h1>Hi {{ user.username }}!</h1>
+    <br/>
+    <hr/>
+    <h4>Change your password:</h4>
+    <form method="POST", action="#">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" name="start" value="start">Analyze</button>
+        <button type="submit" name="password" value="password">Change password</button>
+    </form>
+    <br/>
+    <hr/>
+    <form method="POST" action="#">
+        {% csrf_token %}
+    <button type="submit" name="logout" value="logout">Log out</button>
     </form>
 {% endblock %}
