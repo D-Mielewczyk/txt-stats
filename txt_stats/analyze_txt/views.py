@@ -27,20 +27,22 @@ class TextInputViews(viewsets.ModelViewSet):
 
 def home(response):
     if response.method == "POST":
-        t = TextInputViews()
-        return t.create(response.POST)
-        # return redirect(response, "/db/")
+        call = requests.post("http://127.0.0.1:8000/api", data={"title": response.POST["title"],
+                                                                "text": response.POST["text"],
+                                                                "case_sensitive": response.POST["case_sensitive"]})
+        return redirect(response, f"/api/")
+        # return HttpResponse(response, str(response.POST))
     f = AnalyzeTxt()
     return render(response, "analyze_txt/home.html", {"form": f})
 
 
 def list_analyzed(response):
-    call = requests.get("http://127.0.0.1:8000/db")
+    call = requests.get("http://127.0.0.1:8000/api")
     return render(response, "analyze_txt/list_analyzed.html", {"texts": call.json()})
 
 
 def analyzed(response, id):
-    call = requests.get(f"http://127.0.0.1:8000/db/{id}")
+    call = requests.get(f"http://127.0.0.1:8000/api/{id}")
     call = call.json()
     plot = plot_words(call["occurrences"])
     return render(response, "analyze_txt/analyzed.html", {"text": call["text"],

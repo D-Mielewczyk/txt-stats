@@ -52,3 +52,5 @@ def plot_words(words):
     fig.savefig(flike)
     b64 = base64.b64encode(flike.getvalue()).decode()
     return b64
+
+# def get_url(response):
