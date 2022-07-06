@@ -2,7 +2,7 @@
 {% block content %}
     <ul>
     {% for text in texts %}
-        <li><h3><a href="http://127.0.0.1:8000/view/{{ text.id }}" class="link-dark">{{ text.title }}</a></h3></li>
+        <li><h3><a href="/view/{{ text.id }}" class="link-dark">{{ text.title }}</a></h3></li>
     {% endfor %}
     </ul>
 {% endblock %}

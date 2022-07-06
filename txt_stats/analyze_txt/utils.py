@@ -41,11 +41,10 @@ def plot_words(words):
     colors = [color.hex for color in list(purple.range_to(blue, 10))]
     bars = ax.bar(list(words.keys())[:10], values, color=colors, edgecolor="#FFFFFF")
     ax.bar_label(bars)
-    ax.set_title("Top 10 most common words")
-    ax.set_xlabel("word")
-    ax.set_ylabel("count")
+    ax.set_title("Top 10 most common words", fontsize="20")
+    ax.set_xlabel("word", fontweight='bold')
+    ax.set_ylabel("count", fontweight='bold')
     ax.set_ylim(ymin=round(min(values) - values[-1] * 0.1) - 1)
-    # fig.savefig("E://MDDaw/Pobrane/words.pdf")
 
     # https://spapas.github.io/2021/02/08/django-matplotlib/
     flike = io.BytesIO()
@@ -53,4 +52,3 @@ def plot_words(words):
     b64 = base64.b64encode(flike.getvalue()).decode()
     return b64
 
-# def get_url(response):

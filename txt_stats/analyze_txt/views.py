@@ -27,11 +27,13 @@ class TextInputViews(viewsets.ModelViewSet):
 
 def home(response):
     if response.method == "POST":
-        call = requests.post("http://127.0.0.1:8000/api", data={"title": response.POST["title"],
-                                                                "text": response.POST["text"],
-                                                                "case_sensitive": response.POST["case_sensitive"]})
-        return redirect(response, f"/api/")
-        # return HttpResponse(response, str(response.POST))
+        buff = "case_sensitive" in response.POST.keys()
+        call = requests.post("http://127.0.0.1:8000/api/", data={"title": response.POST["title"],
+                                                                 "text": response.POST["text"],
+                                                                 "case_sensitive": buff})
+        call = call.json()
+        return redirect(f"/view/{call['id']}")
+
     f = AnalyzeTxt()
     return render(response, "analyze_txt/home.html", {"form": f})
 

@@ -1,0 +1,10 @@
+{% extends 'analyze_txt/base.html' %}
+{% block content %}
+    <h1>Register</h1>
+    <br>
+    <form method="POST" action="#">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" name="start" value="start">Analyze</button>
+    </form>
+{% endblock %}
