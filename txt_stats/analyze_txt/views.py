@@ -1,12 +1,11 @@
 import requests
+from django.conf import settings
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rest_framework import viewsets
 
 from .forms import CreateTxtForm, RegisterForm, LoginForm, ChangePasswordForm
-from .models import TextInput
 from .serializers import *
 from .utils import *
 
@@ -24,9 +23,14 @@ class TextInputViews(viewsets.ModelViewSet):
 def home(response):
     if response.method == "POST":
         buff = "case_sensitive" in response.POST.keys()
-        call = requests.post("http://127.0.0.1:8000/api/", data={"title": response.POST["title"],
-                                                                 "text": response.POST["text"],
-                                                                 "case_sensitive": buff})
+        if response.user.is_authenticated:
+            user = response.user.pk
+        else:
+            user = None
+        call = requests.post(f"{settings.SITE}api/", data={"title": response.POST["title"],
+                                                           "text": response.POST["text"],
+                                                           "case_sensitive": buff,
+                                                           "owner": user})
         call = call.json()
         return redirect(f"/view/{call['id']}")
 
@@ -77,12 +81,12 @@ def account(response):
 
 
 def list_analyzed(response):
-    call = requests.get("http://127.0.0.1:8000/api")
+    call = requests.get(f"{settings.SITE}api")
     return render(response, "analyze_txt/list_analyzed.html", {"texts": call.json()})
 
 
 def analyzed(response, id):
-    call = requests.get(f"http://127.0.0.1:8000/api/{id}")
+    call = requests.get(f"{settings.SITE}api/{id}")
     call = call.json()
     plot = plot_words(call["occurrences"])
     return render(response, "analyze_txt/analyzed.html", {"text": call["text"],

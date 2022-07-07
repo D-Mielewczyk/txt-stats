@@ -1,10 +1,12 @@
 {% extends 'analyze_txt/base.html' %}
+
 {% block content %}
+{% load crispy_forms_filters %}
     <h1>{{ title }}</h1>
     <br>
     <form method="POST" action="#">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" name="start" value="start">Analyze</button>
+        {{ form|crispy }}
+        <button type="submit" name="start" value="start" class="btn btn-dark">Analyze</button>
     </form>
 {% endblock %}

@@ -1,18 +1,25 @@
 {% extends 'analyze_txt/base.html' %}
 {% block content %}
+{% load crispy_forms_filters %}
     <h1>Hi {{ user.username }}!</h1>
     <br/>
     <hr/>
+    <h4>Your data:</h4>
+    <ul>
+        <li><b>pk/id</b>: {{ user.pk }}</li>
+        <li><b>email</b>: {{ user.email }}</li>
+    </ul>
     <h4>Change your password:</h4>
     <form method="POST", action="#">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" name="password" value="password">Change password</button>
+        {{ form|crispy }}
+        <br>
+        <button type="submit" name="password" value="password" class="btn btn-warning">Change password</button>
     </form>
     <br/>
     <hr/>
     <form method="POST" action="#">
         {% csrf_token %}
-    <button type="submit" name="logout" value="logout">Log out</button>
+    <button type="submit" name="logout" value="logout" class="btn btn-dark">Log out</button>
     </form>
 {% endblock %}

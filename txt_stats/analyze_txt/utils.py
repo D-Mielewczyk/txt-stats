@@ -1,7 +1,9 @@
+import base64
+import io
 from re import sub
+
 import matplotlib.pyplot as plt
 from colour import Color
-import io, base64
 
 
 def count_words(txt, case_sensitive):
@@ -33,22 +35,24 @@ def extract_palindromes(words):
 def plot_words(words):
     plt.style.use("dark_background")
     fig, ax = plt.subplots()
-    values = list(words.values())[:10]
-    if len(values) == 0:
-        return None
     purple = Color("purple")
     blue = Color("blue")
     colors = [color.hex for color in list(purple.range_to(blue, 10))]
+    values = list(words.values())[:10]
     bars = ax.bar(list(words.keys())[:10], values, color=colors, edgecolor="#FFFFFF")
     ax.bar_label(bars)
     ax.set_title("Top 10 most common words", fontsize="20")
     ax.set_xlabel("word", fontweight='bold')
     ax.set_ylabel("count", fontweight='bold')
     ax.set_ylim(ymin=round(min(values) - values[-1] * 0.1) - 1)
+    plt.xticks(rotation=-25)
+    fig.tight_layout()
+    return fig_to_b64(fig)
 
-    # https://spapas.github.io/2021/02/08/django-matplotlib/
+
+# https://spapas.github.io/2021/02/08/django-matplotlib/
+def fig_to_b64(fig):
     flike = io.BytesIO()
     fig.savefig(flike)
     b64 = base64.b64encode(flike.getvalue()).decode()
     return b64
-
