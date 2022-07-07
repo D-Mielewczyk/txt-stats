@@ -20,7 +20,7 @@ class TextInputViews(viewsets.ModelViewSet):
         return TextInputSerializer
 
 
-def home(response):
+def create(response):
     if response.method == "POST":
         buff = "case_sensitive" in response.POST.keys()
         if response.user.is_authenticated:
@@ -44,13 +44,13 @@ def account(response):
             if "password" in response.POST.keys():
                 user = authenticate(response, username=response.user.username, password=response.POST["password"])
                 if user is not None:
-                    return render(response, "analyze_txt/account_message.html", {"title": "Wrong password!",
-                                                                                 "button": "Try again..."})
+                    return render(response, "analyze_txt/message.html", {"title": "Wrong password!",
+                                                                         "button": "Try again..."})
                 u = User.objects.get(username=response.user.username)
                 u.set_password(response.POST["new_password"])
                 u.save()
-                return render(response, "analyze_txt/account_message.html", {"title": "Password changed successfully.",
-                                                                             "button": "Proceed to your account..."})
+                return render(response, "analyze_txt/message.html", {"title": "Password changed successfully.",
+                                                                     "button": "Proceed to your account..."})
             else:
                 logout(response)
                 return redirect("/account/")
@@ -67,10 +67,10 @@ def account(response):
             user = authenticate(response, username=response.POST["username"], password=response.POST["password"])
             if user is not None:
                 login(response, user)
-                return render(response, "analyze_txt/account_message.html", {"title": "Successfully logged in!",
-                                                                             "button": "Proceed to your account..."})
+                return render(response, "analyze_txt/message.html", {"title": "Successfully logged in!",
+                                                                     "button": "Proceed to your account..."})
             else:
-                return render(response, "analyze_txt/account_message.html",
+                return render(response, "analyze_txt/message.html",
                               {"title": "Unsuccessful log in attempt! User with same login already exists",
                                "button": "Try again..."})
 
@@ -82,12 +82,24 @@ def account(response):
 
 def list_analyzed(response):
     call = requests.get(f"{settings.SITE}api")
-    return render(response, "analyze_txt/list_analyzed.html", {"texts": call.json()})
+    call = call.json()
+    pop_this = []
+    for index, text in enumerate(call):
+        if not can_access(response.user, text["owner"]):
+            pop_this.append(index)
+    for i, v in enumerate(pop_this):
+        call.pop(v - i)
+
+    return render(response, "analyze_txt/list_analyzed.html", {"texts": call})
 
 
 def analyzed(response, id):
     call = requests.get(f"{settings.SITE}api/{id}")
     call = call.json()
+    if not can_access(response.user, call["owner"]):
+        return render(response, "analyze_txt/message.html", {"title": "You don't have access to this data",
+                                                             "button": "Go back...",
+                                                             "href": "../"})
     plot = plot_words(call["occurrences"])
     return render(response, "analyze_txt/analyzed.html", {"text": call["text"],
                                                           "words": call["occurrences"],

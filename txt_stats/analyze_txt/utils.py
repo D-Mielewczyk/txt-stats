@@ -56,3 +56,13 @@ def fig_to_b64(fig):
     fig.savefig(flike)
     b64 = base64.b64encode(flike.getvalue()).decode()
     return b64
+
+
+def can_access(user, owner):
+    if user.is_superuser:
+        return True
+    if owner is None:
+        return True
+    if owner == user.pk:
+        return True
+    return False

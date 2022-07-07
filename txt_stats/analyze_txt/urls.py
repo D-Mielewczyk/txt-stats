@@ -8,7 +8,8 @@ router = DefaultRouter()
 router.register(r'api', views.TextInputViews, basename='api')
 
 urlpatterns = [
-    path("", views.home, name="home"),
+    path("", views.create, name="create"),
+    path("create/", views.create, name="create"),
     path("view/<int:id>/", views.analyzed, name="view"),
     path("view/", views.list_analyzed, name="list"),
     path("account/", views.account, name="account"),
