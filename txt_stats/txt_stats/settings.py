@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'txt_stats.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'txt-stats-db',
+        'NAME': 'txt-inputs',
         'USER': os.environ['db_user'],
         'PASSWORD': os.environ['db_password'],
         'HOST': 'localhost',

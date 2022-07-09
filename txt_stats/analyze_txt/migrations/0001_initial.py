@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='TextInputs',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.CharField(max_length=1000000000)),
+                ('text', models.CharField(max_length=1000)),
                 ('case_sensitive', models.BooleanField()),
             ],
         ),
