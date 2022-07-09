@@ -26,7 +26,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 SITE = os.environ['SITE']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['DEBUG']
 
 ALLOWED_HOSTS = []
 
@@ -79,8 +79,12 @@ WSGI_APPLICATION = 'txt_stats.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'txt-stats-db',
+        'USER': os.environ['db_user'],
+        'PASSWORD': os.environ['db_password'],
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
